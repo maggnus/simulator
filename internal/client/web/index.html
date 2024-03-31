@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Button Example</title>
+</head>
+<body>
+<div id="board">
+    <h1>Press the button to move the Robot</h1>
+
+    <button hx-post="/start" hx-target="#board">Start</button>
+    <button hx-post="/stop" hx-target="#board">Stop</button>
+    <br>
+
+    <table>
+        <tbody>
+        <tr>
+            <td></td>
+            <td><button hx-post="/forward" hx-target="#board">Forward</button></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td><button hx-post="/left" hx-target="#board">Left</button></td>
+            <td></td>
+            <td><button hx-post="/right" hx-target="#board">Right</button></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><button hx-post="/back" hx-target="#board">Back</button></td>
+            <td></td>
+        </tr>
+        </tbody>
+    </table>
+
+    {{ with $board := . }}
+    <p>{{ $board.Message }}</p>
+    <table>
+        <tbody>
+        {{range $board.Cells}}
+        <tr>
+            {{range .}}
+            <td>
+                <div id="cell" {{ if eq . 1 }}class="active"{{ end }}>
+                    {{ if eq . 1 }}
+                        {{ $board.S }}
+                    {{ end }}
+                </div>
+            </td>
+            {{end}}
+        </tr>
+        {{end}}
+        </tbody>
+    </table>
+    {{ end }}
+
+</div>
+
+<script src="https://unpkg.com/htmx.org@1.9.11" integrity="sha384-0gxUXCCR8yv9FM2b+U3FDbsKthCI66oH5IA9fHppQq9DDMHuMauqq1ZHBpJxQ0J0" crossorigin="anonymous"></script>
+
+<style>
+    table {
+        border-collapse: collapse;
+    }
+
+    td {
+        border: 0;
+    }
+
+    button {
+        width: 60px;
+        height: 60px;
+    }
+
+    #cell {
+        background-color: deepskyblue;
+        width: 100px;
+        height: 100px;
+        border: 3px solid white;
+        display: flex;
+        justify-content: center;
+        top: 50%;
+    }
+
+    #cell.active {
+        border: 3px solid green;
+        text-align: justify-all;
+    }
+</style>
+
+</body>
+</html>
+

@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  robot:
+    container_name: robot
+    build:
+      context: .
+      dockerfile: Dockerfile.robot
+    ports:
+      - "8888:8888"
+  controller:
+    container_name: controller
+    depends_on:
+      - robot
+    build:
+      context: .
+      dockerfile: Dockerfile.controller
+    ports:
+      - "5000:5000"
+  client:
+    container_name: client
+    # https://stackoverflow.com/questions/65456814/docker-apple-silicon-m1-preview-mysql-no-matching-manifest-for-linux-arm64-v8
+    platform: linux/x86_64
+    build:
+      context: .
+      dockerfile: Dockerfile.client
+    ports:
+        - "8080:8080"

@@ -1,0 +1,27 @@
+FROM golang:1.21.3 AS build
+
+WORKDIR /go/src/app
+
+COPY go.mod go.sum ./
+
+RUN go mod download
+
+COPY . .
+
+RUN apt-get update \
+ && DEBIAN_FRONTEND=noninteractive \
+    apt-get install --no-install-recommends --assume-yes \
+      build-essential \
+      libsqlite3-dev
+
+RUN CGO_ENABLED=1 GOOS=linux go build -o app ./cmd/controller
+
+FROM golang:1.21.3
+
+WORKDIR /root/
+
+COPY --from=build /go/src/app/app .
+COPY --from=build /go/src/app/configs ./configs
+COPY --from=build /go/src/app/config.yml ./configs/config.yml
+
+CMD ["./app"]

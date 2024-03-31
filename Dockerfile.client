@@ -1,0 +1,22 @@
+FROM golang:1.21.3-alpine AS build
+
+WORKDIR /go/src/app
+
+COPY go.mod go.sum ./
+
+RUN go mod download
+
+COPY . .
+
+RUN go build -o app ./cmd/client
+
+FROM golang:1.21.3-alpine
+
+WORKDIR /root
+
+COPY --from=build /go/src/app/app .
+COPY --from=build /go/src/app/configs ./configs
+COPY --from=build /go/src/app/config.yml ./configs/config.yml
+COPY --from=build /go/src/app/internal/client/web/index.html ./internal/client/web/index.html
+
+CMD ["./app", "web"]
