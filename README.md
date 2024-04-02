@@ -104,7 +104,7 @@ To start the web interface
 go run ./cmd/client/ instruction web
 ```
 
-![web.png](./static/web.png =x300)
+![web.png[100x200](./static/web.png)
 
 # Third-party libraries
 
