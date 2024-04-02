@@ -51,7 +51,7 @@ Run a command from the project root folder:
 make up
 ```
 
-Open in a browser URL:
+Open Client's WebUI in browser:
 
 ```
 http://localhost:8080
