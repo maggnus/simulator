@@ -2,15 +2,16 @@ package middleware
 
 import (
 	"context"
-	"github.com/labstack/echo/v4"
 	"net/http"
 	"simulator/api"
 	"simulator/ent/record"
-	clint "simulator/internal/controller/client"
+	"simulator/internal/controller/client"
 	"simulator/internal/controller/db"
+
+	"github.com/labstack/echo/v4"
 )
 
-func DBLogger(db *db.DB, client *clint.Client) echo.MiddlewareFunc {
+func DBLogger(db *db.DB, client *client.Client) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			req := c.Request()

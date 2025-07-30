@@ -1,4 +1,4 @@
-FROM golang:1.24.5 AS build
+FROM golang:1.24.5-alpine AS build
 
 WORKDIR /go/src/app
 
@@ -11,11 +11,8 @@ COPY cmd/simulated_robot ./cmd/simulated_robot
 COPY internal/robot ./internal/robot
 COPY configs ./configs
 COPY ent ./ent
-COPY config.yml .
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends build-essential libsqlite3-dev && \
-    rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache build-base sqlite-dev
 
 RUN CGO_ENABLED=1 GOOS=linux go build -o app ./cmd/simulated_robot
 
@@ -27,6 +24,5 @@ WORKDIR /root/
 
 COPY --from=build /go/src/app/app .
 COPY --from=build /go/src/app/configs ./configs
-COPY --from=build /go/src/app/config.yml ./configs/config.yml
 
 CMD ["./app"]

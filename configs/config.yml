@@ -1,15 +1,13 @@
 config:
-    host: 127.0.0.1
-    port: 8888
-    sndbuf: 8192
-    rcvbuf: 8192
+  host: robot
+  port: 8888
+  sndbuf: 8192
+  rcvbuf: 8192
 
 server:
-    host: 127.0.0.1
-    port: 5000
+  host: controller
+  port: 5000
 
 database:
-    driver: sqlite3
-    source: "log.sqlite?_fk=1"
-
-
+  driver: sqlite3
+  source: "log.sqlite?_fk=1"
