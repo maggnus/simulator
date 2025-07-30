@@ -29,4 +29,13 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
     - name: Build and push
-      run: make build
+      run: |
+        TAG=""
+        if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+          TAG="latest"
+        elif [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
+          TAG="development"
+        else
+          TAG="alpha-${{ github.sha }}"
+        fi
+        make build TAG=$TAG

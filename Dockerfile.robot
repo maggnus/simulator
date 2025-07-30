@@ -16,6 +16,7 @@ RUN apk add --no-cache build-base sqlite-dev
 
 RUN CGO_ENABLED=1 GOOS=linux go build -o app ./cmd/simulated_robot
 
+ARG TAG=latest
 FROM golang:1.24.5-alpine
 
 RUN apk add --no-cache sqlite-libs
