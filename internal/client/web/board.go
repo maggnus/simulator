@@ -150,7 +150,7 @@ func (c *Board) OK() {
 }
 
 func (c *Board) Err(err error) {
-	log.Printf(err.Error())
+	log.Printf("%v", err)
 	c.S = sad
 	c.Message = err.Error()
 }

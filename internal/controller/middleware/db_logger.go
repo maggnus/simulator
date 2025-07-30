@@ -3,7 +3,6 @@ package middleware
 import (
 	"context"
 	"net/http"
-	"simulator/api"
 	"simulator/ent/record"
 	"simulator/internal/controller/client"
 	"simulator/internal/controller/db"
@@ -16,7 +15,7 @@ func DBLogger(db *db.DB, client *client.Client) echo.MiddlewareFunc {
 		return func(c echo.Context) error {
 			req := c.Request()
 
-			r, err := db.Record.
+			_, err := db.Record.
 				Create().
 				SetHTTPMethod(record.HTTPMethod(req.Method)).
 				SetIPAddress(req.RemoteAddr).
@@ -26,10 +25,10 @@ func DBLogger(db *db.DB, client *client.Client) echo.MiddlewareFunc {
 				return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 			}
 
-			err = client.Send(api.NewMessage(r.IPAddress, r.Instruction))
-			if err != nil {
-				return echo.NewHTTPError(http.StatusBadRequest, err.Error())
-			}
+			// err = client.Send(api.NewMessage(r.IPAddress, r.Instruction))
+			// if err != nil {
+			// 	return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+			// }
 
 			return c.String(http.StatusOK, "OK")
 		}

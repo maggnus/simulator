@@ -18,7 +18,7 @@ func NewServer(config configs.Config) (*Server, error) {
 }
 
 func (c *Server) Run() error {
-	addr := fmt.Sprintf("%s:%d", c.config.Config.Host, c.config.Config.Port)
+	addr := fmt.Sprintf("%s:%d", c.config.App.Host, c.config.App.Port)
 
 	log.Printf("start listener: %s", addr)
 
@@ -41,6 +41,6 @@ func (c *Server) Run() error {
 		}
 
 		// Handle client connection in a goroutine
-		go handleClient(conn, c.config.Config.ReciveBuffer)
+		go handleClient(conn, c.config.App.ReciveBuffer)
 	}
 }

@@ -24,6 +24,10 @@ func NewMessageData(b []byte) (*Message, error) {
 	return &message, nil
 }
 
+func (c *Message) Marshal() ([]byte, error) {
+	return json.Marshal(c)
+}
+
 func (c *Message) Valid() error {
 	if c.Sender == "" {
 		return fmt.Errorf("message sender is not defined: %+v", c)

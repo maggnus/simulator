@@ -1,50 +1,59 @@
 package web
 
 import (
+	_ "embed"
 	"html/template"
 	"net/http"
 	"reflect"
 )
 
+//go:embed index.html
+var indexHTML []byte
+
 var board *Board
 
-func Server() {
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+func SetupRoutes() *http.ServeMux {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		board = NewBoard(6)
 		Render(w)
 	})
 
-	http.HandleFunc("/start", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/start", func(w http.ResponseWriter, r *http.Request) {
 		board.Start()
 		Render(w)
 	})
 
-	http.HandleFunc("/stop", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/stop", func(w http.ResponseWriter, r *http.Request) {
 		board.Stop()
 		Render(w)
 	})
 
-	http.HandleFunc("/right", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/right", func(w http.ResponseWriter, r *http.Request) {
 		board.Right()
 		Render(w)
 	})
 
-	http.HandleFunc("/left", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/left", func(w http.ResponseWriter, r *http.Request) {
 		board.Left()
 		Render(w)
 	})
 
-	http.HandleFunc("/forward", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/forward", func(w http.ResponseWriter, r *http.Request) {
 		board.Forward()
 		Render(w)
 	})
 
-	http.HandleFunc("/back", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/back", func(w http.ResponseWriter, r *http.Request) {
 		board.Back()
 		Render(w)
 	})
+	return mux
+}
 
-	http.ListenAndServe(":8080", nil)
+func Server() {
+	mux := SetupRoutes()
+	http.ListenAndServe(":8080", mux)
 }
 
 func eq(a, b interface{}) bool {
@@ -53,7 +62,6 @@ func eq(a, b interface{}) bool {
 
 func Render(w http.ResponseWriter) {
 	board.Print()
-	tmpl := template.Must(template.ParseFiles("./internal/client/web/index.html"))
-	tmpl.Funcs(template.FuncMap{"eq": eq})
+	tmpl := template.Must(template.New("index.html").Funcs(template.FuncMap{"eq": eq}).Parse(string(indexHTML)))
 	tmpl.Execute(w, board)
 }

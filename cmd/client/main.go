@@ -27,7 +27,7 @@ func main() {
 
 	err = cli.Execute()
 	if err != nil {
-		log.Printf(err.Error())
+		log.Printf("%v", err)
 		os.Exit(1)
 	}
 

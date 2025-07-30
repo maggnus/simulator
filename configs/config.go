@@ -8,23 +8,27 @@ import (
 
 var ConfigFile = "configs/config.yml"
 
+type ServerConfig struct {
+	Host string `yaml:"host"`
+	Port int    `yaml:"port"`
+}
+
+type DatabaseConfig struct {
+	Driver string `yaml:"driver"`
+	Source string `yaml:"source"`
+}
+
+type AppConfig struct {
+	Host         string `yaml:"host"`
+	Port         int    `yaml:"port"`
+	SendBuffer   int    `yaml:"sndbuf"`
+	ReciveBuffer int    `yaml:"rcvbuf"`
+}
+
 type Config struct {
-	Server struct {
-		Host string `yaml:"host"`
-		Port int    `yaml:"port"`
-	} `yaml:"server"`
-
-	Database struct {
-		Driver string `yaml:"driver"`
-		Source string `yaml:"source"`
-	} `yaml:"database"`
-
-	Config struct {
-		Host         string `yaml:"host"`
-		Port         int    `yaml:"port"`
-		SendBuffer   int    `yaml:"sndbuf"`
-		ReciveBuffer int    `yaml:"rcvbuf"`
-	} `yaml:"config"`
+	Server   ServerConfig   `yaml:"server"`
+	Database DatabaseConfig `yaml:"database"`
+	App      AppConfig      `yaml:"config"`
 }
 
 func LoadConfig() (Config, error) {

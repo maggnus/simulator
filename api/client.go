@@ -25,7 +25,7 @@ func (c *Client) Command(cmd Command) error {
 	addr := fmt.Sprintf("http://%v:%v/%v", c.host, c.port, cmd)
 	req, err := http.NewRequest("POST", addr, nil)
 	if err != nil {
-		return fmt.Errorf("error creating request:", err)
+		return fmt.Errorf("error creating request: %v", err)
 	}
 
 	// Set headers (if needed)
@@ -35,7 +35,7 @@ func (c *Client) Command(cmd Command) error {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		return fmt.Errorf("error sending request:", err)
+		return fmt.Errorf("error sending request: %v", err)
 	}
 	defer resp.Body.Close()
 
