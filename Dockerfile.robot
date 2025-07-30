@@ -1,4 +1,4 @@
-FROM golang:1.21.3 AS build
+FROM golang:1.24.5 AS build
 
 WORKDIR /go/src/app
 
@@ -6,17 +6,22 @@ COPY go.mod go.sum ./
 
 RUN go mod download
 
-COPY . .
+COPY api ./api
+COPY cmd/simulated_robot ./cmd/simulated_robot
+COPY internal/robot ./internal/robot
+COPY configs ./configs
+COPY ent ./ent
+COPY config.yml .
 
-RUN apt-get update \
- && DEBIAN_FRONTEND=noninteractive \
-    apt-get install --no-install-recommends --assume-yes \
-      build-essential \
-      libsqlite3-dev
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends build-essential libsqlite3-dev && \
+    rm -rf /var/lib/apt/lists/*
 
 RUN CGO_ENABLED=1 GOOS=linux go build -o app ./cmd/simulated_robot
 
-FROM golang:1.21.3
+FROM golang:1.24.5-alpine
+
+RUN apk add --no-cache sqlite-libs
 
 WORKDIR /root/
 
