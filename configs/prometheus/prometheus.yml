@@ -1,0 +1,16 @@
+global:
+  scrape_interval: 1m
+
+scrape_configs:
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]
+  - job_name: "client"
+    static_configs:
+      - targets: ["client:8080"]
+  - job_name: "controller"
+    static_configs:
+      - targets: ["controller:5000"]
+  - job_name: "robot"
+    static_configs:
+      - targets: ["robot:8888"]
