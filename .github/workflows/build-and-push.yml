@@ -21,9 +21,11 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
       - name: Setup GitVersion
         uses: ./.github/actions/git-version
         id: gitversion
+
       - name: Build and push Docker image
         uses: ./.github/actions/docker-action-ghcr
         with:
