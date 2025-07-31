@@ -1,0 +1,19 @@
+name: Build and Push Client
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'cmd/client/**'
+      - 'internal/client/**'
+      - 'go.mod'
+      - 'go.sum'
+
+jobs:
+  build:
+    uses: ./.github/workflows/build-and-push.yml
+    with:
+      dockerfile: Dockerfile.client
+      image_name: simulator-client
+    secrets: inherit

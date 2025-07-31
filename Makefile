@@ -15,10 +15,7 @@ doc: ## Generate documentation
 	go install golang.org/x/tools/cmd/godoc@latest
 	godoc -http=:8080
 
-TAG ?= latest
 
-build: ## Build
-	docker-compose build --build-arg TAG=${TAG}
 
 up: ## Up
 	docker-compose up -d  --remove-orphans

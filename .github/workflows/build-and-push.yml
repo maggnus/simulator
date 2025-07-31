@@ -1,0 +1,25 @@
+name: Build and Push Docker Image
+
+on:
+  workflow_call:
+    inputs:
+      dockerfile:
+        required: true
+        type: string
+      image_name:
+        required: true
+        type: string
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Build and push Docker image
+        uses: ./.github/actions/docker-action-ghcr
+        with:
+          dockerfile: ${{ inputs.dockerfile }}
+          image_name: ${{ inputs.image_name }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}

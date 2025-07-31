@@ -1,0 +1,19 @@
+name: Build and Push Robot
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'cmd/simulated_robot/**'
+      - 'internal/robot/**'
+      - 'go.mod'
+      - 'go.sum'
+
+jobs:
+  build:
+    uses: ./.github/workflows/build-and-push.yml
+    with:
+      dockerfile: Dockerfile.robot
+      image_name: simulator-robot
+    secrets: inherit

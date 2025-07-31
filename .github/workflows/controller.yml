@@ -1,0 +1,19 @@
+name: Build and Push Controller
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'cmd/controller/**'
+      - 'internal/controller/**'
+      - 'go.mod'
+      - 'go.sum'
+
+jobs:
+  build:
+    uses: ./.github/workflows/build-and-push.yml
+    with:
+      dockerfile: Dockerfile.controller
+      image_name: simulator-controller
+    secrets: inherit
