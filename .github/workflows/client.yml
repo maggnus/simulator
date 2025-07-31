@@ -4,11 +4,11 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'cmd/client/**'
-      - 'internal/client/**'
-      - 'go.mod'
-      - 'go.sum'
+    # paths:
+    #   - 'cmd/client/**'
+    #   - 'internal/client/**'
+    #   - 'go.mod'
+    #   - 'go.sum'
 
 jobs:
   build:
