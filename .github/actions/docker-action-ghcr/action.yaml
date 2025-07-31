@@ -1,0 +1,57 @@
+name: 'Docker build and push to Github Registry'
+description: 'Docker build and push to Github Registry'
+
+inputs:
+  tagName:
+    description: 'The image tag name'
+    required: true
+    default: 'latest'
+  githubToken:
+    description: 'GitHub token for authentication'
+    required: true
+  repositoryOwner:
+    description: 'The owner of the repository'
+    required: true
+    default: ${{ github.repository_owner }}
+  repositoryName:
+    description: 'The name of the repository'
+    required: true
+    default: ${{ github.event.repository.name }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Log in to GitHub Container Registry
+      shell: bash
+      run: |
+        echo "${{ inputs.githubToken }}" | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Extract repository name
+      shell: bash
+      run: |
+        echo "REPO_NAME=${GITHUB_REPOSITORY##*/}" >> $GITHUB_ENV
+
+    - name: Build and push Docker image
+      shell: bash
+      run: |
+        REPO_OWNER_LOWERCASE=$(echo "${{ inputs.repositoryOwner }}" | tr '[:upper:]' '[:lower:]')
+        REPO_NAME_LOWERCASE=$(echo "${{ inputs.repositoryName }}" | tr '[:upper:]' '[:lower:]')
+        IMAGE_NAME=ghcr.io/$REPO_OWNER_LOWERCASE/$REPO_NAME_LOWERCASE
+        TAG=${{ inputs.tagName }}
+        
+        docker buildx build \
+          --push \
+          --tag $IMAGE_NAME:$TAG \
+          --file Dockerfile \
+          .
+
+    - name: Logout from GHCR
+      shell: bash
+      run: |
+        docker logout ghcr.io

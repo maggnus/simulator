@@ -1,0 +1,23 @@
+workflow: TrunkBased/preview1
+# workflow: GitHubFlow/v1
+next-version: 1.0.0
+
+# branches:
+#   main:
+#     label: ''
+#     increment: Patch
+
+#   feature:
+#     label: ''
+#     increment: Patch
+
+#   hotfix:
+#     label: 'fix'
+#     increment: Patch
+
+#   pull-request:
+#     label: 'pr'
+
+#   unknown:
+#     label: 'rc'
+#     increment: Patch

@@ -1,0 +1,46 @@
+name: 'GitVersion'
+description: 'Set environment variables with different version options'
+
+inputs:
+  gitversion_version:
+    description: 'The version of GitVersion to install'
+    required: false
+    default: '6.0.5'
+
+runs:
+  using: 'composite'
+  steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup dotnet
+      if: env.ACT
+      uses: actions/setup-dotnet@v4.2.0
+      with:
+        dotnet-version: '8.x'
+
+    - name: Install GitVersion
+      uses: gittools/actions/gitversion/setup@v3.1.1
+      with:
+        versionSpec: '${{ inputs.gitversion_version }}'
+
+    # The gitversion path environment variable ends with /x64 
+    # Note: Maybe this will be fixed in the next releases
+    - name: Determine Version
+      if: env.ACT
+      uses: gittools/actions/gitversion/execute@v3.1.1
+      with:
+        useConfigFile: true
+        configFilePath: ${{ github.action_path }}/GitVersion.yml
+      env:
+        GITVERSION_PATH: /opt/hostedtoolcache/GitVersion.Tool/${{ inputs.gitversion_version }}/x64
+
+    - name: Determine Version (ACT)
+      if: env.ACT == null
+      uses: gittools/actions/gitversion/execute@v3.1.1
+      with:
+        useConfigFile: true
+        configFilePath: ${{ github.action_path }}/GitVersion.yml
+
+    
